@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"net/http"
 	"strings"
@@ -23,8 +24,7 @@ var (
 	heartbeat    = time.Tick(5 * time.Second)
 )
 
-/*
-Enable this for TLS/SSL communication
+// Enable this for TLS/SSL communication
 var (
 	transport = http.Transport{
 		TLSClientConfig: &tls.Config{
@@ -32,7 +32,8 @@ var (
 		},
 	}
 )
-*/
+
+/*
 var (
 	transport = http.Transport{
 		MaxIdleConns:        100,
@@ -40,7 +41,7 @@ var (
 		MaxIdleConnsPerHost: 100,
 	}
 )
-
+*/
 // Configure HTTPClient with above-mentioned (transport) properties.
 func init() {
 	http.DefaultClient = &http.Client{Transport: &transport}
@@ -62,7 +63,7 @@ func main() {
 	})
 	go processRequests()
 	// HTTP endpoint for receiving the backend requests.
-	go http.ListenAndServe(":8000", nil)
+	go http.ListenAndServeTLS(":8000", "cert/server.crt", "cert/server.key", nil)
 	// HTTP endpoint for receiving a backend server registration requests.
 	go http.ListenAndServe(":8002", new(appserverHandler))
 	println("Catamaran in action ...")

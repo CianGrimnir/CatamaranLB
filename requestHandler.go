@@ -15,7 +15,7 @@ var (
 	currentIndex = 0
 	client       = http.Client{Transport: &transport, Timeout: 10 * time.Second}
 	reverseProxy = []*httputil.ReverseProxy{}
-	httpScheme   = "http"
+	httpScheme   = "https"
 	pingEndpoint = "/health/ping/"
 )
 
@@ -53,7 +53,7 @@ func processRequests() {
 			}
 			if !isFound {
 				appservers = append(appservers, host)
-				serveUrl, e := url.Parse("http://" + host)
+				serveUrl, e := url.Parse("https://" + host)
 
 				if e != nil {
 					fmt.Println("error ", e.Error())
