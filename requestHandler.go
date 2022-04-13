@@ -103,6 +103,7 @@ func processRequests() {
 
 func processingRequest(appserverURL string, appserverProxy *httputil.ReverseProxy, request *webRequest) {
 	fmt.Println("Forwarding request to url - " + appserverURL)
+	appserverProxy.Transport = &transport
 	appserverProxy.ServeHTTP(request.w, request.r)
 	request.doneCh <- struct{}{}
 	return
